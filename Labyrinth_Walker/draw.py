@@ -6,16 +6,18 @@ games.init(screen_width=800, screen_height=600, fps=60)
 
 class BoardMetric:
     """Класс для пересчёта координат"""
+
     def __init__(self, pos_x, pos_y):
         self.tile_width = 40
         self.tile_height = 40
         self.pos_x = pos_x
         self.pos_y = pos_y
+
     def get_x(self):
-        return self.tile_width*(0.5+self.pos_x)
+        return self.tile_width * (0.5 + self.pos_x)
 
     def get_y(self):
-        return self.tile_width*(0.5+self.pos_y)
+        return self.tile_width * (0.5 + self.pos_y)
 
 
 class Player(games.Sprite):
@@ -40,19 +42,19 @@ class Player(games.Sprite):
         """Определяет передвижение Игрока"""
         super(Player, self).update()
 
-        #Задаёт снижение таймера задержки между шагами
+        # Задаёт снижение таймера задержки между шагами
         if self.step_delay > 0:
             self.step_delay -= 1
-        if self.a_step_delay >0:
+        if self.a_step_delay > 0:
             self.a_step_delay -= 1
 
         if self.if_automove:
-            if self.a_step_delay ==0:
+            if self.a_step_delay == 0:
                 self.game.calc_path()
                 self.automove()
                 self.a_step_delay = self.STEP_DELAY
 
-        #Отвечает за нажатие клавиш
+        # Отвечает за нажатие клавиш
         if self.step_delay == 0:
             if not self.if_automove:
                 if games.keyboard.is_pressed(games.K_a):
@@ -70,13 +72,12 @@ class Player(games.Sprite):
                     self.if_automove = False
                 self.step_delay = self.STEP_DELAY
 
-
         self.move()
         self.game.check_win()
 
     def try_move(self, dir):
         """Определяет , может ли Игрок передвинуться на заданную клетку"""
-        tpos_x, tpos_y =self.pos[0], self.pos[1]
+        tpos_x, tpos_y = self.pos[0], self.pos[1]
         if dir == "LEFT":
             tpos_x = self.pos[0] - 1
         if dir == "RIGHT":
@@ -100,7 +101,6 @@ class Player(games.Sprite):
     def automove(self):
         self.pos[0], self.pos[1] = self.game.path[0].pos[1], self.game.path[0].pos[0]
         self.game.path.pop(0)
-
 
 
 class Game:
@@ -143,17 +143,12 @@ class Game:
                     tile = games.Sprite(image=start_image, x=draw_x, y=draw_y)
                 elif tile_mark == labyrinth.CellMark.End:
                     tile = games.Sprite(image=end_image, x=draw_x, y=draw_y)
-                elif tile_mark ==labyrinth.CellMark.No:
+                elif tile_mark == labyrinth.CellMark.No:
                     if tile_type == labyrinth.CellType.Empty:
-                        tile = games.Sprite(image=walk_image, x= draw_x, y=draw_y)
+                        tile = games.Sprite(image=walk_image, x=draw_x, y=draw_y)
                     elif tile_type == labyrinth.CellType.Block:
-                        tile = games.Sprite(image=wall_image, x= draw_x, y=draw_y)
+                        tile = games.Sprite(image=wall_image, x=draw_x, y=draw_y)
                 games.screen.add(tile)
-                #for debugging
-                # count = games.Text(value=self.lab.get_count(ix, iy), size=20, color=color.green, x=draw_x,
-                #                   y=draw_y) #for debugging
-               # if self.lab.get_count(ix, iy) != math.inf:
-                #    games.screen.add(count)
 
     def calc_path(self):
         filled = pathfinder.fill_shortest_path(self.lab, self.player.pos, self.lab.get_end())
@@ -161,23 +156,6 @@ class Game:
         path.reverse()
         path.pop(0)
         self.path = path
-        #print(self.path[0].pos)
-
-     #   self.debug_calc_path(filled)
-
-
-    def debug_calc_path(self, board):
-        """For debugging"""
-        lab_wdth, lab_hght = board.get_size()
-        for ix in range(lab_wdth):
-            for iy in range(lab_hght):
-                pos = BoardMetric(ix, iy)
-                draw_x = pos.get_x()
-                draw_y = pos.get_y()
-                count = games.Text(value=board.get_count(ix, iy), size=20, color=color.green, x=draw_x,
-                                   y=draw_y)
-                if board.get_count(ix, iy) != math.inf:
-                    games.screen.add(count)
 
     def check_win(self):
         if self.player.pos == self.end_pos:

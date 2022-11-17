@@ -1,10 +1,9 @@
 import labyrinth
 import math
-import numpy as np
 
 
 def fill_shortest_path(board, start, end, max_distance=math.inf):
-    """ Creates a duplicate of the board and fills the `Cell.count` field with the distance from the start to that cell. """
+    """ Создаёт копию доски и заполняет поле 'Cell.count' значениями дистанции от начальной точки. """
     nboard = board.clone()
     nboard.clear_count(math.inf)
 
@@ -46,7 +45,7 @@ def fill_shortest_path(board, start, end, max_distance=math.inf):
 
 
 def backtrack_to_start(board, end):
-    """ Returns the path to the end, assuming the board has been filled in via fill_shortest_path """
+    """ Возвращает кратчайший путь, предполагая, что доска была заполнена с помощью fill_shortest_path """
     cell = board.at(end)
     path = []
     while cell != None:

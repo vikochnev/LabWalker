@@ -1,0 +1,2 @@
+SuperWires~=0.9.6
+numpy~=1.23.4

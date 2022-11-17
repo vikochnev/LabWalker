@@ -1,7 +1,8 @@
 # Модуль, отвечающий за создание уровня-лабиринта
 
-import copy, types
+import copy
 from enum import Enum
+
 import numpy as np
 
 

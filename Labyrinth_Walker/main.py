@@ -5,7 +5,8 @@
 #Лабиринт состоит из пустых клеток и стен
 #Условие победы - нахождение персонажа на тайле "конец"
 
-import draw, labyrinth, pathfinder
+import draw
+import labyrinth
 
 lab = labyrinth.create_labyrinth("map.txt")
 labyrinth_Walker = draw.Game()
